@@ -27,3 +27,6 @@ In IPL Stats the app stats contains all the statistical data fetching logics.
 7. python manage.py runserver
 8. open a web browser and open this address http://localhost:8000/
 9. Enter the desired year to check data for the given year.
+
+## Live Link
+https://ipl-statistics-gale.herokuapp.com/
