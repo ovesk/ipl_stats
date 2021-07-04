@@ -1,0 +1,408 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=PT+Sans+Narrow&family=Quicksand&family=Staatliches&display=swap" rel="stylesheet">
+    <script src="https://cdn.plot.ly/plotly-2.2.0.min.js"></script>
+
+    <style>
+      body{
+        font-family: 'PT Sans Narrow', sans-serif;
+        background-color: lightblue;
+      }
+      h1{
+        margin-top: 30px;
+      }
+      .main_boxes{
+        min-height: 250px;
+        max-height: 350px;
+        /*border: solid black 1px;*/
+      }
+      .search_box{
+        margin-top: 20px;
+        min-height: 50px;
+      }
+      .lower_box_margin{
+        margin-top: 23px;
+      }
+      .card{
+        height: 100%;
+        width: 100%;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+        padding: 16px;
+      }
+      #won_toss_and_match{
+        text-align: center;
+      }
+    </style>
+
+    <title>IPL - Season Statstics</title>
+  </head>
+  <body>
+    <div class="container">
+        <div class="row">
+          <div class="col-sm-12">
+            <h1>IPL - Season Statstics</h1>
+          </div>
+          <div class="col-sm-12">
+            <div class="search_box">
+              <div class="input-group mb-3">
+                <input type="text" class="form-control" placeholder="season" aria-label="season" aria-describedby="basic-addon2" id="season_year" required>
+                <div class="input-group-append">
+                  <button class="btn btn-primary" onclick="get_season_data()" type="button">Button</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6 main_boxes">
+              <div class="card">
+                <h4>Top 4 Teams this season</h4>
+                <div id="top_teams_graph" style="width: 100%"></div>
+              </div>
+            </div>
+            <div class="col-sm-6 main_boxes">
+              <div class="card">
+                <h4>Top Board</h4>
+                <h5 id='total_matches'></h5>
+                <table class="table">
+                  <tr>
+                    <th>Parameter</th>
+                    <th>Team</th>
+                    <th>Stat's</th>
+                  </tr>
+                  <tr>
+                    <td>Max Tosse's Won</td>
+                    <td id="toss_win_name">-</td>
+                    <td id="toss_win_stats">-</td>
+                  </tr>
+                  <tr>
+                    <td>Max Match's Won</td>
+                    <td id="matches_win_name">-</td>
+                    <td id="matches_win_stats">-</td>
+                  </tr>
+                  <tr>
+                    <td>Won by Most Runs</td>
+                    <td id="run_win_name">-</td>
+                    <td id="run_win_stats">-</td>
+                  </tr>
+                  <tr>
+                    <td>Won by most Wickets</td>
+                    <td id="wicket_win_name">-</td>
+                    <td id="wicket_win_stats">-</td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+        </div>
+        <div class="row lower_box_margin">
+          <div class="col-sm-12">
+            <div class="card" style="min-height: 50px;">
+              <div class="row">
+                <div class="col-sm-2">
+                  <h4>Location Insights</h4>
+                </div>
+                <div class="col-sm-5">
+                  <p id="top_team_max_win_loaction">-</p>
+                </div>
+                <div class="col-sm-5">
+                  <p id="top_match_location">-</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row lower_box_margin" style='margin-bottom: 10px'>
+            <div class="col-sm-6 main_boxes">
+              <div class="card">
+                <h4>Player's Stats</h4>
+                <table class="table">
+                  <tr>
+                    <th></th>
+                    <th>Player Name</th>
+                    <th>Stats</th>
+                  </tr>
+                  <tr>
+                    <th>Max Player of the match</th>
+                    <td id="player_of_match_name">-</td>
+                    <td id="player_of_match_stats">-</td>
+                  </tr>
+                  <tr>
+                    <th>Most Run's by Batsman</th>
+                    <td id="most_run_batsman_name">-</td>
+                    <td id="most_run_batsman_stats">-</td>
+                  </tr>
+                  <tr>
+                    <th>Most Catches by Fielder</th>
+                    <td id="most_catches_fielder_name">-</td>
+                    <td id="most_catches_fielder_stats">-</td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+            <div class="col-sm-6 main_boxes">
+              <div class="card">
+                <h4>Toss Insights</h4>
+                <div id="bat_field_percent_chart"></div>
+                <div id="won_toss_and_match"></div>
+              </div>
+            </div>
+        </div>
+    </div>
+  </body>
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+  <script type="text/javascript">
+
+    let top_winning_team_api = "/v1/top_winning_teams/";
+    let top_tosses_winning_teams = "/v1/top_tosses_winning_teams/";
+    let top_player_of_matchs = "/v1/top_player_of_matchs/"
+    let top_team_max_win_locations = "/v1/top_team_max_win_locations/"
+    let max_match_locations = "/v1/max_match_locations/";
+    let toss_percent = "/v1/toss_percent/";
+    let top_win_by_runs = "/v1/top_win_by_runs/"
+    let top_win_by_wickets = "/v1/top_win_by_wickets/";
+    let won_toss_and_match_count = "/v1/won_toss_and_match_count/";
+    let most_runs_by_batsman = "/v1/most_runs_by_batsman/";
+    let most_catches_by_fielder = "/v1/most_catches_by_fielder/";
+
+
+    function callApi(endpoint){
+      return fetch(endpoint).then(response => response.json())
+    }
+
+    function to_query_str(json){
+      return "?" + Object.keys(json).map(
+        key => key + "=" + json[key]).join("&")
+    }
+
+    function check_response(response){
+      if (response.length > 0){
+        return response[0]
+      }
+      return false
+    }
+
+    function make_top_teams_graph(input_data){
+      $('#top_teams_graph').html('')
+      teams = []
+      winnings = []
+      for (team of input_data){
+        teams.push(team.winner)
+        winnings.push(team.wins)
+      }
+      var data = [
+        {
+          x: teams,
+          y: winnings,
+          type: 'bar'
+        }
+      ];
+
+      var layout = {
+        xaxis: {title: 'Teams Won'},
+        yaxis: {title: 'Matches'},
+        margin: {
+          l: 50,
+          r: 50,
+          b: 50,
+          t: 50,
+        },
+        width: $('#top_teams_graph').width(),
+        height: 280,
+        paper_bgcolor: '#FDFDFD',
+        plot_bgcolor: '#FDFDFD',
+        autosize: false,
+        automargin: false,
+        showlegend: false,
+      };
+
+      var chart_config = {
+        responsive: true,
+        displaylogo: false,
+        modeBarButtonsToRemove: ['zoomIn2d', 'zoomOut2d',
+          'autoScale2d', 'hoverClosestCartesian',
+          'hoverCompareCartesian', 'toggleSpikelines']
+      }
+      Plotly.newPlot('top_teams_graph', data, layout, chart_config);
+    }
+
+
+    function make_toss_win_loss_graph(input_data){
+      $('#bat_field_percent_chart').html('');
+      total_matches = input_data.total_match
+      opted_batting = input_data.count
+      batting_percent = 0
+      if (total_matches > 0 && opted_batting > 0){
+        batting_percent = (opted_batting / total_matches) * 100
+      }
+      fielding_percent = 100 - batting_percent
+      var data = [{
+        values: [batting_percent, fielding_percent],
+        labels: ['Batting', 'Fielding'],
+        hoverinfo: 'label+percent',
+        hole: .8,
+        type: 'pie'
+      }]
+
+      var layout = {
+        title: '% of teams decided to bat and field',
+        height: 250,
+        width: $('#bat_field_percent_chart').width(),
+        showlegend: true,
+        grid: {rows: 1, columns: 1}
+      };
+
+      Plotly.newPlot('bat_field_percent_chart', data, layout);
+    }
+
+    function get_teams_stats(season_year){
+      callApi(top_winning_team_api + to_query_str({season: season_year, top: 4}))
+      .then((response) => {
+        make_top_teams_graph(response)
+        new_response = check_response(response)
+        if (new_response){
+          $('#matches_win_name').html(new_response.winner)
+          $('#matches_win_stats').html(new_response.wins + " matches")
+        }
+      })
+      callApi(top_tosses_winning_teams + to_query_str({season: season_year}))
+      .then((response) => {
+        new_response = check_response(response)
+        if (new_response){
+          $('#toss_win_name').html(new_response.toss_winner)
+          $('#toss_win_stats').html(new_response.wins + " tosses")
+        }
+      })
+      callApi(top_win_by_runs + to_query_str({season: season_year}))
+      .then((response) => {
+        new_response = check_response(response)
+        if (new_response){
+          $('#run_win_name').html(new_response.winner)
+          $('#run_win_stats').html(new_response.win_by_runs  + " runs")
+        }
+      })
+      callApi(top_win_by_wickets + to_query_str({season: season_year}))
+      .then((response) => {
+        new_response = check_response(response)
+        if (new_response){
+          $('#wicket_win_name').html(new_response.winner)
+          $('#wicket_win_stats').html(new_response.win_by_wickets  + " wickets")
+        }
+      })
+    }
+
+    function get_toss_stats(season_year){
+      callApi(toss_percent + to_query_str({season: season_year, decision: 'bat'}))
+      .then((response) => {
+        new_response = check_response(response)
+        if (new_response){
+          make_toss_win_loss_graph(new_response)
+        }
+      })
+      callApi(won_toss_and_match_count + to_query_str({season: season_year}))
+      .then((response) => {
+        new_response = check_response(response)
+        if (new_response){
+          $('#total_matches').html(`   Total Matches: ${new_response.total_match}`);
+          innerhtml = `<b>${new_response.count} times teams won when they won the toss out of total ${new_response.total_match} matches.</b>`
+          $('#won_toss_and_match').html(innerhtml)
+        }
+      })
+    }
+
+    function get_players_stats(season_year){
+      callApi(top_player_of_matchs + to_query_str({season: season_year}))
+      .then((response) => {
+        new_response = check_response(response)
+        if (new_response){
+          $('#player_of_match_name').html(new_response.player_of_match)
+          $('#player_of_match_stats').html(new_response.wins + " titles")
+        }
+      })
+      callApi(most_runs_by_batsman + to_query_str({season: season_year}))
+      .then((response) => {
+        new_response = check_response(response)
+        if (new_response){
+          $('#most_run_batsman_name').html(new_response.batsman)
+          $('#most_run_batsman_stats').html(new_response.runs + " runs")
+        }
+      })
+      callApi(most_catches_by_fielder + to_query_str({season: season_year}))
+      .then((response) => {
+        new_response = check_response(response)
+        if (new_response){
+          $('#most_catches_fielder_name').html(new_response.fielder)
+          $('#most_catches_fielder_stats').html(new_response.catches + " catches")
+        }
+      })
+    }
+
+    function get_location_stats(season_year){
+      callApi(top_team_max_win_locations + to_query_str({season: season_year}))
+      .then((response) => {
+        new_response = check_response(response)
+        if (new_response){
+          innerhtml = `<b>Top team ${new_response.winner} won maximum matches (${new_response.wins}) at ${new_response.city}.</b>`
+          $('#top_team_max_win_loaction').html(innerhtml)
+        }
+      })
+      callApi(max_match_locations + to_query_str({season: season_year}))
+      .then((response) => {
+        new_response = check_response(response)
+        if (new_response){
+          innerhtml = `<b>This season most matches were held at ${new_response.city} i.e ${new_response.count} times.</b>`
+          $('#top_match_location').html(innerhtml)
+        }
+      })
+    }
+
+    function reset_data(){
+      $('#top_teams_graph').html('<b>No Data Available</b>')
+      $('#matches_win_name').html('-')
+      $('#matches_win_stats').html('-')
+      $('#toss_win_name').html('-')
+      $('#toss_win_stats').html('-')
+      $('#run_win_name').html('-')
+      $('#run_win_stats').html('-')
+      $('#wicket_win_name').html('-')
+      $('#wicket_win_stats').html('-')
+      $('#bat_field_percent_chart').html('<b>No Data Available</b>')
+      $('#won_toss_and_match').html('-')    
+      $('#player_of_match_name').html('-')
+      $('#player_of_match_stats').html('-')
+      $('#most_run_batsman_name').html('-')
+      $('#most_run_batsman_stats').html('-')
+      $('#most_catches_fielder_name').html('-')
+      $('#most_catches_fielder_stats').html('-')
+      $('#top_team_max_win_loaction').html('-')
+      $('#top_match_location').html('-')
+      $('#total_matches').html('-')
+    }
+
+    function get_season_data(){
+      reset_data()
+      var season_year = $('#season_year').val()
+      if (season_year.trim() == ''){
+        return false
+      }
+      get_teams_stats(season_year)
+      get_location_stats(season_year)
+      get_toss_stats(season_year)
+      get_players_stats(season_year)
+    }
+
+  </script>
+</html>
