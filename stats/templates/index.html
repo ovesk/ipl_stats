@@ -1,4 +1,5 @@
 <!doctype html>
+{% load static %}
 <html lang="en">
   <head>
     <!-- Required meta tags -->
@@ -15,15 +16,16 @@
     <style>
       body{
         font-family: 'PT Sans Narrow', sans-serif;
-        background-color: lightblue;
+        background-image: url("https://wallpaperaccess.com/full/2302746.jpg");
+        background-color: white;
       }
       h1{
         margin-top: 30px;
+        color: white;
       }
       .main_boxes{
         min-height: 250px;
         max-height: 350px;
-        /*border: solid black 1px;*/
       }
       .search_box{
         margin-top: 20px;
@@ -35,6 +37,7 @@
       .card{
         height: 100%;
         width: 100%;
+        background-color:rgba(255,255,255,0.9);
         box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
         padding: 16px;
       }
@@ -56,7 +59,7 @@
               <div class="input-group mb-3">
                 <input type="text" class="form-control" placeholder="season" aria-label="season" aria-describedby="basic-addon2" id="season_year" required>
                 <div class="input-group-append">
-                  <button class="btn btn-primary" onclick="get_season_data()" type="button">Button</button>
+                  <button class="btn btn-primary" onclick="get_season_data()" type="button">Search</button>
                 </div>
               </div>
             </div>
@@ -222,8 +225,8 @@
         },
         width: $('#top_teams_graph').width(),
         height: 280,
-        paper_bgcolor: '#FDFDFD',
-        plot_bgcolor: '#FDFDFD',
+        paper_bgcolor: '#FFFFF',
+        plot_bgcolor: '#FFFFF',
         autosize: false,
         automargin: false,
         showlegend: false,
@@ -262,7 +265,7 @@
         height: 250,
         width: $('#bat_field_percent_chart').width(),
         showlegend: true,
-        grid: {rows: 1, columns: 1}
+        grid: {rows: 1, columns: 1},
       };
 
       Plotly.newPlot('bat_field_percent_chart', data, layout);
