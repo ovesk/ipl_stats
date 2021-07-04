@@ -1,0 +1,7 @@
+db.sqlite3
+migrations
+__pycache__
+*.pyc
+.DS_Store
+.ipynb_checkpoints
+*.ipynb
