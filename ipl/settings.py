@@ -78,8 +78,12 @@ WSGI_APPLICATION = 'ipl.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'deijumqkct6jh5',
+        'USER': 'xmhpjboluwyfpc',
+        'PASSWORD': 'bafd4058fb5048d4e8a6e76b0b28f48dda45069155ce4df680c857e5c3a8c0c1',
+        'HOST': 'ec2-52-6-77-239.compute-1.amazonaws.com',
+        'PORT': '5432',
     }
 }
 
