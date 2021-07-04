@@ -1,5 +1,7 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
+from django.conf import settings
+from django.conf.urls.static import static
 
 from stats import views
 
@@ -36,4 +38,4 @@ routerv1.register('most_catches_by_fielder', views.MostCatchesByFielderList,
 urlpatterns = [
     path('v1/', include(routerv1.urls)),
     path('', views.IndexView.as_view())
-]
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
